@@ -2,26 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.nav-link {
+  position: relative;
+}
+
+.nav-link-indicator {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background-color: #003c68;
+  transition: width 0.2s ease-in-out;
+}
+
+.nav-link--active {
+  background-color: #e3f2fd;
+  color: #003c68;
+}
+
+.nav-link--active .nav-link-indicator {
+  width: 4px;
+}
+
+.chat-panel {
+  width: 320px;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .chat-panel {
+    width: 350px;
   }
+}
+
+.chat-panel__content {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.chat-panel--closed {
+  width: 0 !important;
+  min-width: 0 !important;
+}
+
+.chat-panel--closed .chat-panel__content {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chat-panel--open .chat-panel__content {
+  opacity: 1;
+}
+
+.chat-panel--open .chat-reopen-wrapper {
+  display: none;
+  pointer-events: none;
+}
+
+.chat-panel--closed .chat-reopen-wrapper {
+  display: block;
+  pointer-events: auto;
+}
+
+.chat-reopen-wrapper {
+  transition: opacity 0.3s ease-in-out;
 }
