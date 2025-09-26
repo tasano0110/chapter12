@@ -11,6 +11,74 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function LoginPage() {
   const router = useRouter();
+  useEffect(() => {
+    // Hide global chrome (header/sidebar) when on the login page
+    const header = document.querySelector(
+      "[data-header]"
+    ) as HTMLElement | null;
+    const shell = document.querySelector("[data-shell]") as HTMLElement | null;
+    const sidebar = document.querySelector(
+      "[data-sidebar]"
+    ) as HTMLElement | null;
+    const chatPanel = document.querySelector(
+      "[data-chat-panel]"
+    ) as HTMLElement | null;
+    const mainEl = document.querySelector("main") as HTMLElement | null;
+    const mainInner = mainEl?.querySelector(
+      ":scope > div"
+    ) as HTMLElement | null;
+    const scrollArea = mainInner?.querySelector(
+      ":scope > div"
+    ) as HTMLElement | null; // flex-1 overflow-y-auto ...
+    const restore: Array<() => void> = [];
+    if (header) {
+      const prev = header.style.display;
+      header.style.display = "none";
+      restore.push(() => (header.style.display = prev));
+    }
+    if (sidebar) {
+      const prev = sidebar.style.display;
+      sidebar.style.display = "none";
+      restore.push(() => (sidebar.style.display = prev));
+    }
+    if (chatPanel) {
+      const prev = chatPanel.style.display;
+      chatPanel.style.display = "none";
+      restore.push(() => (chatPanel.style.display = prev));
+    }
+    if (shell) {
+      const prevPadding = shell.style.paddingTop;
+      const prevBg = shell.style.backgroundColor;
+      shell.style.paddingTop = "0px";
+      shell.style.backgroundColor = "#f8f9fa";
+      restore.push(() => (shell.style.paddingTop = prevPadding));
+      restore.push(() => (shell.style.backgroundColor = prevBg));
+    }
+    if (mainEl) {
+      const prevBg = mainEl.style.backgroundColor;
+      mainEl.style.backgroundColor = "#f8f9fa";
+      restore.push(() => (mainEl.style.backgroundColor = prevBg));
+    }
+    if (mainInner) {
+      const prevHeight = mainInner.style.height;
+      mainInner.style.height = "100vh";
+      restore.push(() => (mainInner.style.height = prevHeight));
+    }
+    if (scrollArea) {
+      const prevOverflow = scrollArea.style.overflowY;
+      const prevPadding = scrollArea.style.padding;
+      const prevHeight = scrollArea.style.height;
+      scrollArea.style.overflowY = "hidden";
+      scrollArea.style.padding = "0";
+      scrollArea.style.height = "100vh";
+      restore.push(() => (scrollArea.style.overflowY = prevOverflow));
+      restore.push(() => (scrollArea.style.padding = prevPadding));
+      restore.push(() => (scrollArea.style.height = prevHeight));
+    }
+    return () => {
+      restore.forEach((fn) => fn());
+    };
+  }, []);
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,30 +147,33 @@ export default function LoginPage() {
       if (error) throw error;
       setInfo("パスワード再設定用のメールを送信しました。");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "再設定メールの送信に失敗しました。");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "再設定メールの送信に失敗しました。"
+      );
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md rounded-xl border bg-white p-6 shadow-sm">
-        <h1 className="text-xl font-semibold mb-1">RAG Docs</h1>
-        <p className="text-sm text-gray-600 mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#f8f9fa] px-4">
+      <div className="w-full max-w-md rounded-xl border border-[#dee2e6] bg-white p-6 shadow-sm">
+        <p className="mb-6 text-sm text-[#6c757d]">
           {mode === "signin"
             ? "ログインして続行してください"
             : "アカウントを作成します"}
         </p>
 
         {/* タブ */}
-        <div className="mb-4 grid grid-cols-2 rounded-lg border p-1 text-sm">
+        <div className="mb-4 grid grid-cols-2 rounded-lg border border-[#dee2e6] p-1 text-sm">
           <button
             onClick={() => setMode("signin")}
             className={`rounded-md py-2 ${
               mode === "signin"
-                ? "bg-gray-900 text-white"
-                : "text-gray-700 hover:bg-gray-100"
+                ? "bg-[#003c68] text-white"
+                : "text-[#333333] hover:bg-[#eef6ff]"
             }`}
           >
             ログイン
@@ -111,8 +182,8 @@ export default function LoginPage() {
             onClick={() => setMode("signup")}
             className={`rounded-md py-2 ${
               mode === "signup"
-                ? "bg-gray-900 text-white"
-                : "text-gray-700 hover:bg-gray-100"
+                ? "bg-[#003c68] text-white"
+                : "text-[#333333] hover:bg-[#eef6ff]"
             }`}
           >
             新規登録
@@ -126,7 +197,7 @@ export default function LoginPage() {
           </div>
         )}
         {info && (
-          <div className="mb-3 rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-700">
+          <div className="mb-3 rounded-md bg-[#e3f2fd] px-3 py-2 text-sm text-[#003c68]">
             {info}
           </div>
         )}
@@ -141,7 +212,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900"
+              className="w-full rounded-lg border border-[#dee2e6] px-3 py-2 outline-none focus:border-[#003c68] focus:ring-2 focus:ring-[#cfe2ff]"
               placeholder="you@example.com"
             />
           </div>
@@ -153,7 +224,7 @@ export default function LoginPage() {
               required={mode === "signin" || mode === "signup"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900"
+              className="w-full rounded-lg border border-[#dee2e6] px-3 py-2 outline-none focus:border-[#003c68] focus:ring-2 focus:ring-[#cfe2ff]"
               placeholder="8文字以上を推奨"
             />
           </div>
@@ -161,7 +232,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={sending}
-            className="w-full rounded-lg border bg-gray-900 px-4 py-2 text-white hover:opacity-90 disabled:opacity-60"
+            className="w-full rounded-full bg-[#003c68] px-4 py-2 text-white transition-colors hover:bg-[#0056a3] disabled:cursor-not-allowed disabled:bg-[#6c757d]"
           >
             {sending
               ? "処理中..."
@@ -175,7 +246,7 @@ export default function LoginPage() {
           <div className="mt-4 text-right">
             <button
               onClick={onResetPassword}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-[#003c68] hover:underline"
             >
               パスワードをお忘れですか？
             </button>

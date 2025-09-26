@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import type { ReactNode, SVGProps } from "react";
+import { AccountMenu } from "@/components/AccountMenu";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -99,21 +100,6 @@ const BellIcon = (props: IconProps) => (
   </svg>
 );
 
-const UserIcon = (props: IconProps) => (
-  <svg
-    viewBox="0 0 24 24"
-    role="img"
-    aria-hidden="true"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.6}
-    {...props}
-  >
-    <circle cx={12} cy={8.5} r={3.5} />
-    <path d="M4.5 20a7.5 7.5 0 0 1 15 0" strokeLinecap="round" />
-  </svg>
-);
-
 const ChatIcon = (props: IconProps) => (
   <svg
     viewBox="0 0 24 24"
@@ -176,7 +162,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="ja">
       <body className="min-h-screen bg-[#f8f9fa] text-[#333333]">
         <div className="min-h-screen">
-          <header className="fixed inset-x-0 top-0 z-50 h-[60px] bg-[#003c68] text-white shadow-sm">
+          <header
+            data-header
+            className="fixed inset-x-0 top-0 z-50 h-[60px] bg-[#003c68] text-white shadow-sm"
+          >
             <div className="flex h-full items-center justify-between px-4 sm:px-6">
               <div className="flex items-center gap-2 text-lg font-semibold tracking-wide">
                 <button
@@ -217,18 +206,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 >
                   <BellIcon className="h-5 w-5" />
                 </button>
-                <button
-                  type="button"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
-                  title="プロフィール"
-                >
-                  <UserIcon className="h-5 w-5" />
-                </button>
+                <AccountMenu />
               </div>
             </div>
           </header>
 
-          <div className="flex pt-[60px]">
+          <div data-shell className="flex pt-[60px]">
             <aside
               data-sidebar
               id="global-sidebar"
