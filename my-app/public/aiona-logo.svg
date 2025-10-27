@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="36" viewBox="0 0 320 72" role="img" aria-label="AIONA logo">
+  <!-- Transparent background; header provides dark blue bg -->
+  <g fill="#ffffff">
+    <path d="M26 56 L14 56 L8 40 L-0 40 L16 8 L32 40 L24 40 Z" transform="translate(8,4)"/>
+    <rect x="68" y="12" width="8" height="48"/>
+    <circle cx="112" cy="36" r="20" fill="none" stroke="#ffffff" stroke-width="8"/>
+    <path d="M160 16 L160 56 L196 56 L196 48 L168 48 L168 16 Z"/>
+    <path d="M240 56 L224 56 L224 16 L232 16 L256 40 L256 16 L264 16 L264 56 L256 56 L232 32 L232 56 Z"/>
+  </g>
+</svg>
+
+
+
+
+
+
+
+
+
+
+
+

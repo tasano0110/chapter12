@@ -1,0 +1,4 @@
+# Mastra database files
+mastra.db
+mastra.db-shm
+mastra.db-wal

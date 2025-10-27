@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// 役割（messages.role）
+enum MessageRole {
+  user
+  assistant
+  system
+  tool
+}
+
+model User {
+  id          String        @id @default(uuid()) @map("id")
+  email       String        @unique
+  displayName String?       @map("display_name")
+
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt      @map("updated_at")
+
+  // relations
+  documents     Document[]
+  conversations Conversation[]
+  messages      Message[]
+
+  @@map("users")
+}
+
+model Category {
+  id        String    @id @default(uuid()) @map("id")
+  name      String    @unique
+  description String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt      @map("updated_at")
+
+  // relations
+  documents Document[]
+
+  @@map("categories")
+}
+
+model Document {
+  id          String   @id @default(uuid()) @map("id")
+
+  // 作成者（ユーザー削除時はNULLに）
+  createdById String?  @map("created_by")
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  // 1ドキュメント=1カテゴリ
+  categoryId  String   @map("category_id")
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  title       String
+  summary     String?
+  storagePath String   @map("storage_path")
+
+  uploadedAt  DateTime @default(now()) @map("uploaded_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  @@index([categoryId])
+  @@index([createdById])
+  @@map("documents")
+}
+
+model Conversation {
+  id            String    @id @default(uuid()) @map("id")
+
+  userId        String    @map("user_id")
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt      @map("updated_at")
+  lastMessageAt DateTime? @map("last_message_at")
+
+  // relations
+  messages      Message[]
+
+  @@index([userId, createdAt])
+  @@map("conversations")
+}
+
+model Message {
+  id             String       @id @default(uuid()) @map("id")
+
+  conversationId String       @map("conversation_id")
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // アシスタント発話など、ユーザーが無い場合もある
+  userId   String? @map("user_id")
+  user     User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  role     MessageRole
+  content  String
+  citations Json?   // Mastraの引用スニペットやdoc参照を格納（全文は保存しない）
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}

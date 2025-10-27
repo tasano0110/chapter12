@@ -1,0 +1,47 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^1.2.12",
+    "@ai-sdk/openai": "^2.0.44",
+    "@mastra/core": "^0.20.0",
+    "@mastra/libsql": "^0.15.1",
+    "@mastra/loggers": "^0.10.15",
+    "@mastra/memory": "^0.15.5",
+    "@mastra/rag": "^1.3.0",
+    "@prisma/client": "^6.16.1",
+    "@supabase/supabase-js": "^2.57.4",
+    "@types/uuid": "^10.0.0",
+    "ai": "^5.0.60",
+    "dompurify": "^3.2.7",
+    "mammoth": "^1.11.0",
+    "marked": "^12.0.2",
+    "next": "14.2.16",
+    "openai": "^6.7.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^5.4.296",
+    "react": "^18",
+    "react-dom": "^18",
+    "uuid": "^13.0.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.16",
+    "postcss": "^8.5.6",
+    "prisma": "^6.16.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5"
+  }
+}
