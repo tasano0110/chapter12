@@ -345,7 +345,7 @@ export async function GET(req: NextRequest) {
 
     // prevCursor は簡易対応（必要なら実装）
     return NextResponse.json({
-      data: data.map((d) => ({
+      data: data.map((d: typeof docs[number]) => ({
         id: d.id,
         title: d.title,
         summary: d.summary,
