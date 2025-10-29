@@ -318,13 +318,28 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               // --- Sidebar open/close persistence and toggle ---
               const applySidebarState = (open) => {
                 if (!sidebar) return;
+                const shell = document.querySelector('[data-shell]');
                 sidebar.dataset.state = open ? 'open' : 'closed';
                 if (open) {
                   sidebar.classList.remove('hidden', 'lg:hidden');
                   sidebar.style.removeProperty('display');
+                  // グリッドレイアウトを3カラムに変更
+                  if (shell) {
+                    shell.className = shell.className.replace(
+                      /grid-cols-\[.*?\]/,
+                      'grid-cols-[250px_minmax(0,1fr)_auto]'
+                    );
+                  }
                 } else {
                   sidebar.classList.add('hidden', 'lg:hidden');
                   sidebar.style.display = 'none';
+                  // グリッドレイアウトを2カラムに変更
+                  if (shell) {
+                    shell.className = shell.className.replace(
+                      /grid-cols-\[.*?\]/,
+                      'grid-cols-[minmax(0,1fr)_auto]'
+                    );
+                  }
                 }
                 if (sidebarToggle) {
                   sidebarToggle.setAttribute('aria-pressed', open ? 'true' : 'false');

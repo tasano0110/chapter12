@@ -45,10 +45,17 @@ export default function LoginPage() {
     if (shell) {
       const prevPadding = shell.style.paddingTop;
       const prevBg = shell.style.backgroundColor;
+      const prevClass = shell.className;
       shell.style.paddingTop = "0px";
       shell.style.backgroundColor = "#f8f9fa";
+      // グリッドレイアウトを1カラムに変更（メインコンテンツのみ）
+      shell.className = shell.className.replace(
+        /grid-cols-\[.*?\]/,
+        "grid-cols-[1fr]"
+      );
       restore.push(() => (shell.style.paddingTop = prevPadding));
       restore.push(() => (shell.style.backgroundColor = prevBg));
+      restore.push(() => (shell.className = prevClass));
     }
     if (mainEl) {
       const prevBg = mainEl.style.backgroundColor;

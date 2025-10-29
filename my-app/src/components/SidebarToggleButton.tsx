@@ -3,16 +3,29 @@
 export default function SidebarToggleButton() {
   const onToggleSidebar = () => {
     const sidebar = document.querySelector<HTMLElement>("[data-sidebar]");
-    if (!sidebar) return;
+    const shell = document.querySelector<HTMLElement>("[data-shell]");
+    if (!sidebar || !shell) return;
     const isOpen = sidebar.dataset.state !== "closed";
     const next = !isOpen;
     sidebar.dataset.state = next ? "open" : "closed";
+
+    // サイドバーの表示/非表示を切り替え
     if (next) {
       sidebar.classList.remove("hidden", "lg:hidden");
       sidebar.style.removeProperty("display");
+      // グリッドレイアウトを3カラムに変更
+      shell.className = shell.className.replace(
+        /grid-cols-\[.*?\]/,
+        "grid-cols-[250px_minmax(0,1fr)_auto]"
+      );
     } else {
       sidebar.classList.add("hidden", "lg:hidden");
       sidebar.style.display = "none";
+      // グリッドレイアウトを2カラムに変更（サイドバーの列を削除）
+      shell.className = shell.className.replace(
+        /grid-cols-\[.*?\]/,
+        "grid-cols-[minmax(0,1fr)_auto]"
+      );
     }
     try {
       window.localStorage.setItem("globalSidebarOpen", String(next));
@@ -46,6 +59,9 @@ export default function SidebarToggleButton() {
     </button>
   );
 }
+
+
+
 
 
 
